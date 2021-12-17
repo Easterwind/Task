@@ -88,6 +88,8 @@ namespace Shop.BLL.Services
         {
             int count = _productRepository.GetAll().Count();
             var products = await _productRepository.GetAll().OrderBy(p=>p.Price).ToListAsync();
+            if (count == 0)
+                return null;
             if (count == 1)
                 return  products.FirstOrDefault();
             return products.Skip((int)(count / 2)).Take(1).First();
