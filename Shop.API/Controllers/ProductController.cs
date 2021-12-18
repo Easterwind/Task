@@ -55,13 +55,7 @@ namespace Shop.API.Controllers
         /// Get filtered Products. 
         /// Sample request:
         /// 
-        ///   GET filter
-        ///   {
-        ///    "pageIndex": 1,
-        ///    "pageSize": 12,
-        ///    "sortField": price,
-        ///    "sort": asc
-        ///   }
+        ///  GET /products?pageIndex=1&pageSize=10&sortField=price&sort=asc
         ///  
         /// </remarks>
         /// <param name="filter">Filter:
@@ -70,7 +64,7 @@ namespace Shop.API.Controllers
         /// "sortField" - Field which is used for sorting. Two options here: price or name.
         /// "sort" - Sorting direction. Two options here asc or desc. Ascending or descending.
         /// </param>
-        /// <returns>OK or BadRequest.</returns>
+        /// <returns>List of products or BadRequest.</returns>
         /// <response code="200">Insert successfully</response>
         /// <response code="400">Bad model, "Name" empty</response>
         [HttpGet]
@@ -79,7 +73,7 @@ namespace Shop.API.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _productService.GetFilteredAsync(filter);
-            return new JsonResult(result);
+                return new JsonResult(result);
             }
             else
             {
@@ -99,6 +93,13 @@ namespace Shop.API.Controllers
             return new JsonResult(result);
         }
 
+        /// <remarks>
+        /// Get a Product by id. 
+        /// </remarks>
+        /// <param name="id">Id Product, what we want to find.</param>
+        /// <returns>Product or NotFound.</returns>
+        /// <response code="200">Product</response>
+        /// <response code="404">Product not found</response>
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int Id)
         {
