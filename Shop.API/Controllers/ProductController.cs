@@ -20,6 +20,22 @@ namespace Shop.API.Controllers
             _mapper = mapper;
         }
 
+        /// <remarks>
+        /// Insert new Product to database. 
+        /// Sample request:
+        /// 
+        ///   POST dto
+        ///   {
+        ///    "Name": "Chocolate",
+        ///    "Price": 12.9
+        ///   }
+        ///   
+        /// "Name" is required
+        /// </remarks>
+        /// <param name="dto">New Product.</param>
+        /// <returns>OK or BadRequest.</returns>
+        /// <response code="200">Insert successfully</response>
+        /// <response code="400">Bad model, "Name" empty</response>
         [HttpPost]
         public async Task<IActionResult> InsertAsync([FromBody] CreateProductDto dto)
         {
@@ -35,13 +51,47 @@ namespace Shop.API.Controllers
             }
         }
 
+        /// <remarks>
+        /// Get filtered Products. 
+        /// Sample request:
+        /// 
+        ///   GET filter
+        ///   {
+        ///    "pageIndex": 1,
+        ///    "pageSize": 12,
+        ///    "sortField": price,
+        ///    "sort": asc
+        ///   }
+        ///  
+        /// </remarks>
+        /// <param name="filter">Filter:
+        /// "pageIndex" - The page number, more then 1.
+        /// "pageSize" - Number or items in one page,more then 1.
+        /// "sortField" - Field which is used for sorting. Two options here: price or name.
+        /// "sort" - Sorting direction. Two options here asc or desc. Ascending or descending.
+        /// </param>
+        /// <returns>OK or BadRequest.</returns>
+        /// <response code="200">Insert successfully</response>
+        /// <response code="400">Bad model, "Name" empty</response>
         [HttpGet]
         public async Task<IActionResult> GetAllFilteredAsync([FromQuery] ProductFilterDto filter)
         {
-            var result = await _productService.GetFilteredAsync(filter);
+            if (ModelState.IsValid)
+            {
+                var result = await _productService.GetFilteredAsync(filter);
             return new JsonResult(result);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
+        /// <remarks>
+        /// Count all Products in database. 
+        /// </remarks>
+        /// <returns>int number</returns>
+        /// <response code="200">Count successfully</response>
         [HttpGet("count")]
         public async Task<IActionResult> GetCountAsync()
         {
@@ -58,6 +108,13 @@ namespace Shop.API.Controllers
             return new JsonResult(result);
         }
 
+        /// <remarks>
+        /// Deletes a specific Product. 
+        /// </remarks>
+        /// <param name="id">Id Product, what we want to remove.</param>
+        /// <returns>OK or NotFound.</returns>
+        /// <response code="200">Deleted successfully</response>
+        /// <response code="404">Product not found</response>
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] int Id)
         {
@@ -68,6 +125,11 @@ namespace Shop.API.Controllers
             return Ok();
         }
 
+        /// <remarks>
+        /// Deletes all Products. 
+        /// </remarks>
+        /// <returns>OK</returns>
+        /// <response code="200">Deleted successfully</response>
         [HttpDelete]
         public async Task<IActionResult> DeleteAllAsync()
         {
@@ -75,6 +137,11 @@ namespace Shop.API.Controllers
             return Ok();
         }
 
+        /// <remarks>
+        /// Find the expensivest Product. 
+        /// </remarks>
+        /// <returns>Product or null</returns>
+        /// <response code="200">Find successfully</response>
         [HttpGet("expensivest")]
         public async Task<IActionResult> GetExpensivestAsync()
         {
@@ -82,6 +149,11 @@ namespace Shop.API.Controllers
             return new JsonResult(result);
         }
 
+        /// <remarks>
+        /// Find the cheapest Product. 
+        /// </remarks>
+        /// <returns>Product or null</returns>
+        /// <response code="200">Find successfully</response>
         [HttpGet("cheapest")]
         public async Task<IActionResult> GetCheapestAsync()
         {
@@ -89,6 +161,11 @@ namespace Shop.API.Controllers
             return new JsonResult(result);
         }
 
+        /// <remarks>
+        /// Find median Product. 
+        /// </remarks>
+        /// <returns>Product or null</returns>
+        /// <response code="200">Find successfully</response>
         [HttpGet("median")]
         public async Task<IActionResult> GetMedianAsync()
         {
