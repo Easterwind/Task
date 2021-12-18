@@ -55,7 +55,7 @@ namespace Shop.API.Controllers
         /// Get filtered Products. 
         /// Sample request:
         /// 
-        ///  GET /products?pageIndex=1&pageSize=10&sortField=price&sort=asc
+        ///  GET /products?pageIndex=1&amp;pageSize=10&amp;sortField=price&amp;sort=asc
         ///  
         /// </remarks>
         /// <param name="filter">Filter:
